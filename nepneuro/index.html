@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex, nofollow">
-<title>Informações para Início NepNeuro</title>
+<title>Levantamento Estratégico NepNeuro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -36,6 +36,9 @@ h1 span{color:var(--nude)}
 .track{flex:1;height:8px;background:var(--nude-soft);border-radius:99px;overflow:hidden}
 .fill{height:100%;width:0;background:var(--or);border-radius:99px;transition:width .3s}
 .pct{font-weight:700;font-size:15px;min-width:110px;text-align:right;color:var(--ink2)}
+.note{margin-top:22px;background:var(--nude);color:#141414;border-radius:18px;padding:22px 26px;display:flex;gap:18px;align-items:center}
+.note span{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--or);color:#fff;font-size:24px;font-weight:600;display:grid;place-content:center;line-height:1}
+.note p{margin:0;font-size:17px;font-weight:600;line-height:1.45}
 .how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:30px}
 .how div{background:var(--nude-soft);border-radius:16px;padding:18px 20px;font-size:14.5px;line-height:1.5;color:var(--ink2)}
 .how b{display:block;font-size:12px;letter-spacing:.2em;color:var(--or);margin-bottom:6px}
@@ -88,8 +91,8 @@ textarea{width:100%;margin-top:10px;font:inherit;font-size:14.5px;padding:10px 1
 <div class="overlay" id="ov"><div><div class="spin"></div><p>Carregando as informações…</p></div></div>
 <header class="hero"><div class="hin">
   <div class="brand"><img src="data:image/png;base64,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" alt="">BlackHaus</div>
-  <h1>Informações para início <span>da consultoria.</span></h1>
-  <p class="lead">Para iniciarmos as frentes prioritárias com base nos números reais da NepNeuro, reunimos abaixo as informações necessárias. Planilhas, relatórios do sistema e documentos que já existem servem como estão. Todas as informações são tratadas com confidencialidade.</p>
+  <h1>Levantamento estratégico NepNeuro. <span>Antes da estratégia, os números.</span></h1>
+  <p class="lead">Este levantamento reúne os dados que vão orientar as primeiras decisões da consultoria. Relatórios, planilhas e documentos que já existem na empresa podem entrar caso queiram. Todo o conteúdo é confidencial e de acesso restrito.</p>
 </div></header>
 
 <main class="wrap">
@@ -100,6 +103,8 @@ textarea{width:100%;margin-top:10px;font:inherit;font-size:14.5px;padding:10px 1
     </div>
     <div class="prog"><div class="track"><div class="fill" id="fill"></div></div><div class="pct" id="pct"></div></div>
   </div>
+
+  <div class="note"><span aria-hidden="true">+</span><p>Qualquer item pode ser respondido com um documento em Word, Excel, PDF ou outro formato. Basta anexar no próprio item, a qualquer momento.</p></div>
 
   <div class="how">
     <div><b>1 · RESPONDA</b>Escreva no campo do item ou anexe os arquivos. Cada item aceita vários anexos.</div>
