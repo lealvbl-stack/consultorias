@@ -139,7 +139,7 @@ function fmtTime(iso){try{var d=new Date(iso);return d.toLocaleDateString('pt-BR
 function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 
 (function(){
- var ADMIN=((location.hash+location.search).match(/[#&?]k=([0-9a-f-]{36})/i)||[])[1]||'', P=null, filter='all';
+ var ADMIN=((location.hash+location.search).match(/[#&?]k=([0-9a-f-]{36})/i)||[])[1]||'', CODE=(!ADMIN&&/^#[A-Za-z0-9]{6,12}$/.test(location.hash))?location.hash.slice(1):'', P=null, filter='all';
  function stateOf(it){var r=P.resp[it.k],a=P.anx[it.k]||[];if(r&&r.pronto)return'ok';if((r&&r.texto.trim())||a.length)return'par';return'no'}
  function render(){
   var tot=0,ok=0,any=0,files=0,none=0;
@@ -184,7 +184,7 @@ function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){retur
  }
  document.getElementById('refresh').addEventListener('click',function(){load().catch(function(){alertBox('Sem conexão. Tente de novo.')})});
  document.getElementById('filters').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;filter=b.dataset.f;document.querySelectorAll('#filters button').forEach(function(x){x.classList.toggle('on',x===b)});render()});
- load().catch(function(){document.getElementById('ov').textContent='Não foi possível carregar o painel. Verifique a conexão.'});
+ (CODE?sbRpc('acesso_admin',{p_codigo:CODE}).then(function(t){if(!t)throw new Error('x');ADMIN=t}):Promise.resolve()).then(load).catch(function(){document.getElementById('ov').textContent='Não foi possível carregar o painel. Confira o link e a conexão.'});
  setInterval(function(){load().catch(function(){})},10000);
 })();
 </script>

@@ -99,7 +99,7 @@ textarea{width:100%;margin-top:10px;font:inherit;font-size:14.5px;padding:10px 1
   <div class="panel">
     <div class="fields">
       <div class="f"><label>Responsáveis pelo envio</label><div class="who">Marina Nery <span>|</span> Dagoberto Barbosa</div></div>
-      <div class="f"><label for="prazo">Prazo combinado</label><input id="prazo" type="text" placeholder="Data" autocomplete="off"></div>
+      <div class="f"><label>Prazo combinado</label><div class="who">19/11/2026</div></div>
     </div>
     <div class="prog"><div class="track"><div class="fill" id="fill"></div></div><div class="pct" id="pct"></div></div>
   </div>
@@ -186,7 +186,7 @@ function fmtTime(iso){try{var d=new Date(iso);return d.toLocaleDateString('pt-BR
 function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 
 (function(){
- var TOKEN=((location.hash+location.search).match(/[#&?]t=([0-9a-f-]{36})/i)||[])[1]||'', MAX=50*1024*1024;
+ var TOKEN=((location.hash+location.search).match(/[#&?]t=([0-9a-f-]{36})/i)||[])[1]||'', CODE=(!TOKEN&&/^#[A-Za-z0-9]{6,12}$/.test(location.hash))?location.hash.slice(1):'', MAX=50*1024*1024;
  var state={resp:{},anexos:{}}, total=0, pending=0, editing={};
  var stEl=document.getElementById('status');
  function status(kind,msg){stEl.className='status'+(kind?' '+kind:'');stEl.querySelector('span').textContent=msg}
@@ -294,7 +294,7 @@ function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){retur
  function load(first){
   return sbRpc('carregar_formulario',{p_token:TOKEN}).then(function(p){
    if(first){
-    ingest(p);document.getElementById('prazo').value=p.prazo||'';build();
+    ingest(p);build();
     document.getElementById('ov').remove();status('','Tudo salvo');
    }else{
     // merge: refresh items not being edited
@@ -309,14 +309,11 @@ function esc(t){return String(t==null?'':t).replace(/[&<>"']/g,function(c){retur
      var cur=(state.anexos[k]||[]).map(function(a){return a.id}).join(),nw=(fresh.anexos[k]||[]).map(function(a){return a.id}).join();
      if(cur!==nw&&!d.querySelector('.bar')){state.anexos[k]=fresh.anexos[k]||[];var box=d.querySelector('.files');box.innerHTML='';state.anexos[k].forEach(function(a){fileRow(a,k,box)})}
     });
-    var pz=document.getElementById('prazo');
-    if(document.activeElement!==pz)pz.value=p.prazo||'';
-    upd();
+        upd();
    }
   });
  }
- document.getElementById('prazo').addEventListener('input',saveMeta);
- load(true).catch(function(e){document.getElementById('ov').innerHTML='<div><p>'+(/acesso_invalido/.test(e.message)?'Este link não é válido. Confira o endereço recebido.':'Não foi possível carregar agora. Verifique a conexão e recarregue a página.')+'</p></div>'});
+  (CODE?sbRpc('acesso',{p_codigo:CODE}).then(function(t){if(!t)throw new Error('acesso_invalido');TOKEN=t}):Promise.resolve()).then(function(){return load(true)}).catch(function(e){document.getElementById('ov').innerHTML='<div><p>'+(/acesso_invalido/.test(e.message)?'Este link não é válido. Confira o endereço recebido.':'Não foi possível carregar agora. Verifique a conexão e recarregue a página.')+'</p></div>'});
  setInterval(function(){if(!pending)load(false).catch(function(){})},20000);
  window.addEventListener('focus',function(){if(!pending)load(false).catch(function(){})});
  window.addEventListener('beforeunload',function(e){if(pending>0){e.preventDefault();e.returnValue=''}});
